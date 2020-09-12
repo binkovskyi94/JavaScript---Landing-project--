@@ -17,7 +17,6 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     function showTabContent(i = 0) {
         // tabsContent[i].style.display = 'block';
         // tabsContent[i].classList.add('show');
@@ -44,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    const deadline = '2020-12-11';
+    const deadline = '2020-09-11';
 
     function getTimeRemaining(endtime) {
         const   t = Date.parse(endtime) - Date.parse(new Date()),
