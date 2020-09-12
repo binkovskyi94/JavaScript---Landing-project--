@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="offer__action">
-        <button class="btn btn_dark">Связаться с нами</button>
+        <button data-modal class="btn btn_dark">Связаться с нами</button>
       </div>
     </div>
     <div class="container">
@@ -107,7 +107,7 @@
         </div>
         <div class="offer__slider-wrapper">
           <div class="offer__slide">
-            <img src="images/slider/pepper.jpg" alt="pepper">
+            <img src="images/img/slider/pepper.jpg" alt="pepper">
           </div>
           <!-- <div class="offer__slide">
                     <img src="img/slider/food-12.jpg" alt="food">
@@ -267,21 +267,22 @@
       </div>
     </div>
   </div>
+
   <!-- STOP WRITE CODE -->
   @@include('components/_footer.html')
   <div class="modal">
     <div class="modal__dialog">
-        <div class="modal__content">
-            <form action="#">
-                <div class="modal__close">&times;</div>
-                <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
-                <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
-                <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="modal__input">
-                <button class="btn btn_dark btn_min">Перезвонить мне</button>
-            </form>
-        </div>
+      <div class="modal__content">
+        <form action="#">
+          <div data-close class="modal__close">&times;</div>
+          <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
+          <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">
+          <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="modal__input">
+          <button class="btn btn_dark btn_min">Перезвонить мне</button>
+        </form>
+      </div>
     </div>
-</div>
+  </div>
   @@include('components/_scripts.html')
 </body>
 
