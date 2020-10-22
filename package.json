@@ -5,6 +5,7 @@
   "main": "gulpfile.js",
   "dependencies": {
     "jquery": "^3.4.1",
+    "json-server": "^0.16.2",
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {

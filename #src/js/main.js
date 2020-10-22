@@ -1,3 +1,5 @@
+'use strict';
+
 window.addEventListener('DOMContentLoaded', function() {
 
     // Tabs
@@ -41,7 +43,7 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // Timer
 
-    const deadline = '2020-05-11';
+    const deadline = '2021-05-11';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -183,7 +185,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     new MenuCard(
-        "img/tabs/vegy.jpg",
+        "images/tabs/vegy.jpg",
         "vegy",
         'Меню "Фитнес"',
         'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
@@ -192,7 +194,7 @@ window.addEventListener('DOMContentLoaded', function() {
     ).render();
 
     new MenuCard(
-        "img/tabs/post.jpg",
+        "images/tabs/post.jpg",
         "post",
         'Меню "Постное"',
         'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
@@ -201,7 +203,7 @@ window.addEventListener('DOMContentLoaded', function() {
     ).render();
 
     new MenuCard(
-        "img/tabs/elite.jpg",
+        "images/tabs/elite.jpg",
         "elite",
         'Меню “Премиум”',
         'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
@@ -213,7 +215,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     const forms = document.querySelectorAll('form');
     const message = {
-        loading: 'img/form/spinner.svg',
+        loading: 'images/form/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся',
         failure: 'Что-то пошло не так...'
     };
@@ -281,4 +283,8 @@ window.addEventListener('DOMContentLoaded', function() {
             closeModal();
         }, 4000);
     }
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
 });
