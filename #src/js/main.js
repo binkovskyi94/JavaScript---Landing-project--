@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // Timer
 
-    const deadline = '2021-05-11';
+    const deadline = '2020-12-11';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -184,53 +184,18 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const getResource= async (url) => {
-        const res = await fetch(url);
-        
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
-                    
-
-        return await res.json();
-    };
-
-    // getResource('http://localhost:3000/menu')
-    //     .then(data => {
-    //         data.forEach(({img, altimg, title, descr, price}) => {
-    //             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-    //         });
-    //     });
-
     getResource('http://localhost:3000/menu')
-        .then(data => createCard(data));
-
-    function createCard(data) {
-        data.forEach(({img, altimg, title, descr, price}) => {
-            const element = document.createElement('div');
-
-            element.classList.add('menu__item');
-
-            element.innerHTML = `
-            <img src=${img} alt=${altimg}>
-            <h3 class="menu__item-subtitle">${title}</h3>
-            <div class="menu__item-descr">${descr}</div>
-            <div class="menu__item-divider"></div>
-            <div class="menu__item-price">
-                <div class="menu__item-cost">Цена:</div>
-                <div class="menu__item-total"><span>${price}</span> грн/день</div>
-            </div>
-            `;
-
-            document.querySelector('.menu .container').append(element);
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
+            });
         });
-    }
 
     // Forms
 
     const forms = document.querySelectorAll('form');
     const message = {
-        loading: 'images/form/spinner.svg',
+        loading: 'img/form/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся',
         failure: 'Что-то пошло не так...'
     };
@@ -240,16 +205,26 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     const postData = async (url, data) => {
-        const res = await fetch(url, {
-            method: 'POST',
+        let res = await fetch(url, {
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: data
         });
-
+    
         return await res.json();
     };
+
+    async function getResource(url) {
+        let res = await fetch(url);
+    
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+    
+        return await res.json();
+    }
 
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -266,9 +241,6 @@ window.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(form);
 
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
-
-            const obj = {a: 23, b: 50};
-            console.log(Object.entries(obj));
 
             postData('http://localhost:3000/requests', json)
             .then(data => {
@@ -306,35 +278,34 @@ window.addEventListener('DOMContentLoaded', function() {
         }, 4000);
     }
 
-    //Slider variant 2
+    // Slider
 
-    const   slides = document.querySelectorAll('.offer__slide'),
-            slider = document.querySelector('.offer__slider'),
-            prev = document.querySelector('.offer__slider-prev'),
-            next = document.querySelector('.offer__slider-next'),
-            total = document.querySelector('#total'),
-            current = document.querySelector('#current'),
-            slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-            slidesField = document.querySelector('.offer__slider-inner'),
-            width = window.getComputedStyle(slidesWrapper).width;
-
-    let slideIndex = 1;
     let offset = 0;
+    let slideIndex = 1;
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        slider = document.querySelector('.offer__slider'),
+        prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next'),
+        total = document.querySelector('#total'),
+        current = document.querySelector('#current'),
+        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+        width = window.getComputedStyle(slidesWrapper).width,
+        slidesField = document.querySelector('.offer__slider-inner');
 
     if (slides.length < 10) {
         total.textContent = `0${slides.length}`;
-        current.textContent = `0${slideIndex}`;
+        current.textContent =  `0${slideIndex}`;
     } else {
         total.textContent = slides.length;
-        current.textContent = slideIndex;
+        current.textContent =  slideIndex;
     }
-
+    
     slidesField.style.width = 100 * slides.length + '%';
     slidesField.style.display = 'flex';
     slidesField.style.transition = '0.5s all';
 
     slidesWrapper.style.overflow = 'hidden';
-
 
     slides.forEach(slide => {
         slide.style.width = width;
@@ -342,23 +313,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
     slider.style.position = 'relative';
 
-    const 
-        indicators = document.createElement('ol'),
-        dots = [];
-
-        indicators.classList.add('carousel-indicators');
-        indicators.style.cssText = `
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 15;
-            display: flex;
-            justify-content: center;
-            margin-right: 15%;
-            margin-left: 15%;
-            list-style: none;
-        `;
+    const indicators = document.createElement('ol'),
+          dots = [];
+    indicators.classList.add('carousel-indicators');
+    indicators.style.cssText = `
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        margin-right: 15%;
+        margin-left: 15%;
+        list-style: none;
+    `; // Если хотите - добавьте в стили, но иногда у нас нет доступа к стилям
     slider.append(indicators);
 
     for (let i = 0; i < slides.length; i++) {
@@ -386,15 +355,11 @@ window.addEventListener('DOMContentLoaded', function() {
         dots.push(dot);
     }
 
-    function deleteNoDigits(str) {
-        return + str.replace(/\D/g, '');
-    }
-
     next.addEventListener('click', () => {
-        if (offset == deleteNoDigits(width) * (slides.length - 1)) {
+        if (offset == (deleteNotDigits(width) * (slides.length - 1))) {
             offset = 0;
         } else {
-            offset += +width.replace(/\D/g, '');
+            offset += deleteNotDigits(width); 
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -404,41 +369,40 @@ window.addEventListener('DOMContentLoaded', function() {
         } else {
             slideIndex++;
         }
-        
-        if(slides.length < 10) {
-            current.textContent = `0${slideIndex}`;
+
+        if (slides.length < 10) {
+            current.textContent =  `0${slideIndex}`;
         } else {
-            current.textContent = slideIndex;
+            current.textContent =  slideIndex;
         }
 
-        dots.forEach(dot => dot.style.opacity = '.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        dots.forEach(dot => dot.style.opacity = ".5");
+        dots[slideIndex-1].style.opacity = 1;
     });
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = deleteNoDigits(width) * (slides.length - 1); 
+            offset = deleteNotDigits(width) * (slides.length - 1);
         } else {
-            offset -= deleteNoDigits(width);
+            offset -= deleteNotDigits(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
-        
+
         if (slideIndex == 1) {
             slideIndex = slides.length;
         } else {
             slideIndex--;
         }
 
-        if(slides.length < 10) {
-            current.textContent = `0${slideIndex}`;
+        if (slides.length < 10) {
+            current.textContent =  `0${slideIndex}`;
         } else {
-            current.textContent = slideIndex;
+            current.textContent =  slideIndex;
         }
 
-        
-        dots.forEach(dot => dot.style.opacity = '.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        dots.forEach(dot => dot.style.opacity = ".5");
+        dots[slideIndex-1].style.opacity = 1;
     });
 
     dots.forEach(dot => {
@@ -446,74 +410,93 @@ window.addEventListener('DOMContentLoaded', function() {
             const slideTo = e.target.getAttribute('data-slide-to');
 
             slideIndex = slideTo;
-            offset = deleteNoDigits(width) * (slideTo - 1); 
+            offset = deleteNotDigits(width) * (slideTo - 1);
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
-
-            if(slides.length < 10) {
-                current.textContent = `0${slideIndex}`;
+            if (slides.length < 10) {
+                current.textContent =  `0${slideIndex}`;
             } else {
-                current.textContent = slideIndex;
+                current.textContent =  slideIndex;
             }
 
-            dots.forEach(dot => dot.style.opacity = '.5');
-            dots[slideIndex - 1].style.opacity = 1;
+            dots.forEach(dot => dot.style.opacity = ".5");
+            dots[slideIndex-1].style.opacity = 1;
         });
     });
 
+    function deleteNotDigits(str) {
+        return +str.replace(/\D/g, '');
+    }
 
+    // Calculator
 
-    //Slider variant 1 
+    const result = document.querySelector('.calculating__result span');
+    let sex = 'female',
+        height, weight, age,
+        ratio = 1.375;
 
-    // const   slides = document.querySelectorAll('.offer__slide'),
-    //         prev = document.querySelector('.offer__slider-prev'),
-    //         next = document.querySelector('.offer__slider-next'),
-    //         total = document.querySelector('#total'),
-    //         current = document.querySelector('#current');
-    // let slideIndex = 1;
+    function calcTotal() {
+        if (!sex || !height || !weight || !age || !ratio) {
+            result.textContent = '____'; // Можете придумать что угодно
+            return;
+        }
+        if (sex === 'female') {
+            result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
+        } else {
+            result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
+        }
+    }
 
-    // showSlides(slideIndex);
+    calcTotal();
 
-    // if (slides.length < 10) {
-    //     total.textContent = `0${slides.length}`;
-    // } else {
-    //     total.textContent = slides.length;
-    // }
+    function getStaticInformation(parentSelector, activeClass) {
+        const elements = document.querySelectorAll(`${parentSelector} div`);
 
-    // function showSlides(n) {
-    //     if (n > slides.length) {
-    //         slideIndex = 1;
-    //     }
+        elements.forEach(elem => {
+            elem.addEventListener('click', (e) => {
+                if (e.target.getAttribute('data-ratio')) {
+                    ratio = +e.target.getAttribute('data-ratio');
+                } else {
+                    sex = e.target.getAttribute('id');
+                }
+    
+                elements.forEach(elem => {
+                    elem.classList.remove(activeClass);
+                });
+    
+                e.target.classList.add(activeClass);
+    
+                calcTotal();
+            });
+        });
+    }
 
-    //     if (n < 1) {
-    //         slideIndex = slides.length;
-    //     }
+    getStaticInformation('#gender', 'calculating__choose-item_active');
+    getStaticInformation('.calculating__choose_big', 'calculating__choose-item_active');
 
-    //     slides.forEach(item => item.style.display = 'none');
+    function getDynamicInformation(selector) {
+        const input = document.querySelector(selector);
 
-    //     slides[slideIndex - 1].style.display = 'block';
+        input.addEventListener('input', () => {
+            switch(input.getAttribute('id')) {
+                case "height":
+                    height = +input.value;
+                    break;
+                case "weight":
+                    weight = +input.value;
+                    break;
+                case "age":
+                    age = +input.value;
+                    break;
+            }
 
-    //     if (slides.length < 10) {
-    //         current.textContent = `0${slideIndex}`;
-    //     } else {
-    //         current.textContent = slideIndex;
-    //     }
-    // }
+            calcTotal();
+        });
+    }
 
-    // function plusSlides(n) {
-    //     showSlides(slideIndex += n);
-    // }
+    getDynamicInformation('#height');
+    getDynamicInformation('#weight');
+    getDynamicInformation('#age');
 
-    // prev.addEventListener('click', () => {
-    //     plusSlides(-1);
-    // });
-
-    // next.addEventListener('click', () => {
-    //     plusSlides(1);
-    // });
-
-    fetch('http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(res => console.log(res));
 });
